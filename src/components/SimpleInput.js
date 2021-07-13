@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const SimpleInput = props => {
 	const [enteredName, setEnteredName] = useState('')
 	const [enteredNameTouched, setEnteredNameIsTouched] = useState(false)
+	const [formIsValid, setFormIsValid] = useState(false)
 
 	const enteredNameIsValid = enteredName.trim().length > 5
 	const invalid = !enteredNameIsValid && enteredNameTouched
 
+	useEffect(() => {
+		if (enteredNameIsValid) setFormIsValid(true)
+		else setFormIsValid(false)
+	}, [enteredNameIsValid])
 
 	const nameInputChangeHandler = e => {
 		setEnteredName(e.target.value)
@@ -24,42 +29,42 @@ const SimpleInput = props => {
 		if (!enteredNameIsValid) {
 			return
 		}
-    setEnteredName('')
-    setEnteredNameIsTouched(false)
+		setEnteredName('')
+		setEnteredNameIsTouched(false)
 	}
 
 	const nameInputClasses = invalid ? 'form-control invalid' : 'form-control'
 
+	console.log(
+		`%centeredNameIsValid ${enteredNameIsValid} && enteredNameTouched ${enteredNameTouched}`,
+		'background: #444; color: #aadaff; padding: 2px; border-radius:2px;',
+	)
 
-  	console.log(
-			`%centeredNameIsValid ${enteredNameIsValid} && enteredNameTouched ${enteredNameTouched}`,
-			'background: #444; color: #aadaff; padding: 2px; border-radius:2px;',
+	console.log()
+
+	if (invalid) {
+		console.log(
+			`%cInvalid ${invalid}`,
+			'background: #444; color: #da5555; padding: 2px; border-radius:2px;',
 		)
+	} else {
+		console.log(
+			`%cInvalid ${invalid}`,
+			'background: #444; color: #bada55; padding: 2px; border-radius:2px;',
+		)
+	}
 
-		if (invalid) {
-			console.log(
-				`%cInvalid ${invalid}`,
-				'background: #444; color: #da5555; padding: 2px; border-radius:2px;',
-			)
-		} else {
-			console.log(
-				`%cInvalid ${invalid}`,
-				'background: #444; color: #bada55; padding: 2px; border-radius:2px;',
-			)
-		}
-
-		if (enteredName.trim().length > 5) {
-			console.log(
-				`%cEnteredName has ${enteredName.trim().length} characters now`,
-				'background: #444; color: #bada55; padding: 2px; border-radius:2px;',
-			)
-		} else {
-			console.log(
-				`%cEnteredName has ${enteredName.trim().length} characters now`,
-				'background: #444; color: #da5555; padding: 2px; border-radius:2px;',
-			)
-		}
-
+	if (enteredName.trim().length > 5) {
+		console.log(
+			`%cEnteredName has ${enteredName.trim().length} characters now`,
+			'background: #444; color: #bada55; padding: 2px; border-radius:2px;',
+		)
+	} else {
+		console.log(
+			`%cEnteredName has ${enteredName.trim().length} characters now`,
+			'background: #444; color: #da5555; padding: 2px; border-radius:2px;',
+		)
+	}
 
 	return (
 		<form onSubmit={formSubmitHandler}>
@@ -81,7 +86,7 @@ const SimpleInput = props => {
 				</p>
 			)}
 			<div className='form-actions'>
-				<button>Submit</button>
+				<button disabled={!formIsValid}>Submit</button>
 			</div>
 		</form>
 	)

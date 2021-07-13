@@ -5,7 +5,7 @@ const useInput = validationFunction => {
 	const [valueIsTouched, setValueIsTouched] = useState(false)
 
 	const valueIsValid = validationFunction(enteredValue)
-	const valueIsInvalid = !valueIsValid && valueIsTouched
+	const hasError = !valueIsValid && valueIsTouched
 
 	const valueChangeHandler = e => {
 		setEnteredValue(e.target.value)
@@ -21,11 +21,10 @@ const useInput = validationFunction => {
 
 	return {
 		enteredValue,
-		valueIsTouched,
+		valueIsValid,
+		hasError,
 		valueChangeHandler,
 		valueBlurHandler,
-		valueIsValid,
-		valueIsInvalid,
 		resetEnteredValue,
 	}
 }

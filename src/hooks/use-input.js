@@ -1,26 +1,44 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
+
+const initialInputState = {
+	enteredValue: '',
+	valueIsTouched: false,
+}
+
+const inputStateReducer = (state, action) => {
+	if (action.type === 'INPUT')
+		return { enteredValue: action.value, valueIsTouched: state.valueIsTouched }
+	if (action.type === 'BLUR')
+		return { valueIsTouched: true, enteredValue: state.enteredValue }
+	if (action.type === 'RESET')
+		return { enteredValue: '', valueIsTouched: false }
+
+	return initialInputState
+}
 
 const useInput = validationFunction => {
-	const [enteredValue, setEnteredValue] = useState('')
-	const [valueIsTouched, setValueIsTouched] = useState(false)
+	const [inputState, dispatch] = useReducer(
+		inputStateReducer,
+		initialInputState,
+	)
 
-	const valueIsValid = validationFunction(enteredValue)
-	const hasError = !valueIsValid && valueIsTouched
+	const valueIsValid = validationFunction(inputState.enteredValue)
+	const hasError = !valueIsValid && inputState.valueIsTouched
 
 	const valueChangeHandler = e => {
-		setEnteredValue(e.target.value)
+		dispatch({ type: 'INPUT', value: e.target.value })
 	}
 
 	const valueBlurHandler = e => {
-		setValueIsTouched(true)
+		dispatch({ type: 'BLUR' })
 	}
 
 	const resetEnteredValue = e => {
-		setEnteredValue('')
+		dispatch({ type: 'RESET' })
 	}
 
 	return {
-		enteredValue,
+		enteredValue: inputState.enteredValue,
 		valueIsValid,
 		hasError,
 		valueChangeHandler,

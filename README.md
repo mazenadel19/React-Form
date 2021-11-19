@@ -4,6 +4,6 @@
 
 - open terminal
 - git clone `https://github.com/mazenadel19/react-form.git`
-- `npm i`
 - cd react-form
+- `npm i`
 - `npm start` or `yarn start`
